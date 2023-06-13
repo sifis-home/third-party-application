@@ -1,0 +1,3 @@
+FROM arm64v8/alpine
+ADD lamp /
+ENTRYPOINT ["/lamp"]
