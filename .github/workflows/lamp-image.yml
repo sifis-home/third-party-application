@@ -131,8 +131,8 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ghcr.io/sifis-home/3pa_lamp:${{ steps.tag.outputs.value }}
-          ghcr.io/sifis-home/3pa_lamp:latest
+          ghcr.io/sifis-home/3pa-lamp-amd64:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/3pa-lamp-amd64:latest
         labels: |
           org.opencontainers.image.description=A Sifis-Home lamp image for amd64.
           software.quality=${{ steps.coverage.outputs.value }}
@@ -146,8 +146,8 @@ jobs:
         platforms: linux/arm64
         push: true
         tags: |
-          ghcr.io/sifis-home/3pa_lamp:${{ steps.tag.outputs.value }}
-          ghcr.io/sifis-home/3pa_lamp:latest
+          ghcr.io/sifis-home/3pa-lamp-arm64:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/3pa-lamp-arm64:latest
         labels: |
           org.opencontainers.image.description=A Sifis-Home lamp image for arm64.
           software.quality=${{ steps.coverage.outputs.value }}
