@@ -80,7 +80,10 @@ jobs:
 
     - name: Build x86_64
       run: |
+        cross clean
         cross build --release --target x86_64-unknown-linux-musl
+        mkdir -p x86_64-unknown-linux-musl
+        cp target/x86_64-unknown-linux-musl/release/lamp x86_64-unknown-linux-musl/
 
     - name: Produce manifest
       id: manifest
@@ -93,10 +96,15 @@ jobs:
         # Save json in an environment variable
         echo "value=$MANIFEST_JSON" >> $GITHUB_OUTPUT
 
-#    - name: Build aarch64
-#      run: |
-#        cross build --release --target aarch64-unknown-linux-musl
-#
+    - name: Build aarch64
+      run: |
+        # cross have problems when you change the target see
+        # https://github.com/cross-rs/cross/issues/724
+        cross clean
+        cross build --release --target aarch64-unknown-linux-musl
+        mkdir -p aarch64-unknown-linux-musl
+        cp target/aarch64-unknown-linux-musl/release/lamp aarch64-unknown-linux-musl/
+
     - name: Get tag
       id: tag
       run: |
@@ -118,7 +126,7 @@ jobs:
     - name: Build and push amd64
       uses: docker/build-push-action@v4
       with:
-        context: target/x86_64-unknown-linux-musl/release
+        context: x86_64-unknown-linux-musl
         file: docker/Dockerfile-amd64
         platforms: linux/amd64
         push: true
@@ -130,14 +138,18 @@ jobs:
           software.quality=${{ steps.coverage.outputs.value }}
           manifest=${{ steps.manifest.outputs.value }}
 
-#    - name: Build and push arm64v8
-#      uses: docker/build-push-action@v4
-#      with:
-#        push: true
-#        tags: ghcr.io/3pa-lamp-amd64:latest
-#        context: target/aarch64-unknown-linux-musl/release
-#        file: docker/Dockerfile-arm64
-#        outputs: type=registry, annotation-index.org.opencontainers.image.description=A Sifis-Home lamp for arm64
-#        labels: |
-#          software.quality=${{ steps.coverage.outputs.value }}
-#          manifest=${{ steps.manifest.outputs.value }}
+    - name: Build and push arm64v8
+      uses: docker/build-push-action@v4
+      with:
+        context: aarch64-unknown-linux-musl
+        file: docker/Dockerfile-arm64
+        platforms: linux/arm64
+        push: true
+        tags: |
+          ghcr.io/sifis-home/3pa_lamp:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/3pa_lamp:latest
+        labels: |
+          org.opencontainers.image.description=A Sifis-Home lamp image for arm64.
+          software.quality=${{ steps.coverage.outputs.value }}
+          manifest=${{ steps.manifest.outputs.value }}
+
