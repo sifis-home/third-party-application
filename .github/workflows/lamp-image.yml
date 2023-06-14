@@ -93,10 +93,11 @@ jobs:
         # Save json in an environment variable
         echo "value=$MANIFEST_JSON" >> $GITHUB_OUTPUT
 
-#    - name: Build aarch64
-#      run: |
-#        cross build --release --target aarch64-unknown-linux-musl
-#
+    - name: Build aarch64
+      run: |
+        export
+        cross build --release --target aarch64-unknown-linux-musl
+
     - name: Get tag
       id: tag
       run: |
