@@ -97,6 +97,7 @@ jobs:
     - name: Build aarch64
       run: |
         export
+        cross clean
         cross -v build -v --release --target aarch64-unknown-linux-musl
 
     - name: Get tag
