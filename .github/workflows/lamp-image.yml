@@ -100,7 +100,7 @@ jobs:
     - name: Get tag
       id: tag
       run: |
-        if [ -z ${GITHUB_REF#refs/*/} ]
+        if [ ${GITHUB_REF} == "refs/*/master" ]
         then
           echo "value=master" >> $GITHUB_OUTPUT
         else
