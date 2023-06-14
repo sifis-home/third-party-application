@@ -3,27 +3,45 @@
 A Docker container for a SIFIS-Home third-party application automatically
 generated through Continuous Integration starting from code.
 
-The name of a SIFIS-Home third-party application image starts with the prefix `3pa_` 
-and is followed by the name of the application. 
+The name of a SIFIS-Home third-party application image starts with the prefix
+`3pa-` and is followed by the name of the application.
 In this repository, the name of the application is `lamp` and the name of the
-docker image is `3pa_lamp`. 
+docker image is `3pa-lamp-architecture`.
 The repository name is decoupled from this naming convention.
 
 
 # Extract labels from the docker image
 
-To extract the labels from the Docker image, the script `get-labels.sh` is
-provided. This script retrieves the Docker image labels without pulling the 
-image.
-gets the percentage that evaluates the quality of a
-software and the manifest without pulling the image from `ghcr` hub.
+## Shell script
 
-A less efficient solution to retrieve the labels is to run the `docker inspect` 
-command. This solution implies that the image has already been pulled image. 
+To extract the labels from the Docker image, the `get-labels.sh` script has been
+created. This script retrieves Docker image labels without pulling an
+image from the `ghcr` hub.
+
+To get labels for the `lamp` image on `amd64`:
+
+```
+./get-labels.sh gchr.io/sifis-home/3pa-lamp-amd64 latest
+```
+
+The second option, `latest`, represents the most recent version of the image.
+
+To get labels for the `lamp` image on `arm64`:
+
+```
+./get-labels.sh gchr.io/sifis-home/3pa-lamp-arm64 latest
+```
+
+Both the two labels are printed on shell.
+
+## Docker inspect
+
+A less efficient solution to retrieve the labels is to run the `docker inspect`
+command. This solution implies that the image has already been pulled image.
 To extract the labels from the pulled image, run the following command:
 
 ```
-docker inspect --format='{{json .Config.Labels}}' ghcr.io/sifis-home/3pa_image_name
+docker inspect --format='{{json .Config.Labels}}' ghcr.io/sifis-home/3pa-lamp-amd64
 ```
 
 # Labels meaning
@@ -51,7 +69,7 @@ must be more saturated compared to the others.
 
 Below the list of rules to associate the percentage with the right color:
 
-- Red --> when percentage < 60
+- Red --> when percentage < 60%
 - Orange --> when 60% <= percentage < 80%
 - Green --> when percentage >= 80%
 
