@@ -32,8 +32,8 @@ jobs:
     - name: Install manifest
       env:
         MANIFEST_LINK: https://github.com/sifis-home/manifest/releases/download
-        MANIFEST_VERSION: v0.1.0
-        MANIFEST_BINARY: manifest-0.1.0-x86_64-unknown-linux-gnu.tar.gz
+        MANIFEST_VERSION: v0.2.0
+        MANIFEST_BINARY: manifest-0.2.0-x86_64-unknown-linux-gnu.tar.gz
       run: |
         curl -L "$MANIFEST_LINK/$MANIFEST_VERSION/$MANIFEST_BINARY" |
         tar xz -C $HOME/.cargo/bin
@@ -89,8 +89,7 @@ jobs:
       id: manifest
       run: |
         # Produce manifest
-        manifest -b target/x86_64-unknown-linux-musl/release/lamp \
-                 -l data/library-api-labels.json -o lamp.json
+        manifest -b target/x86_64-unknown-linux-musl/release/lamp -l 0.1 -o lamp.json
         # Save json in a temporary variable
         MANIFEST_JSON=$(jq -c '.' lamp.json)
         # Save json in an environment variable
