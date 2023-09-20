@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        name: [lamp, sink, doorbell, fridge]
+        name: [lamp, sink, door, fridge]
 
     runs-on: ubuntu-latest
 

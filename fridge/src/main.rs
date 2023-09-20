@@ -4,22 +4,22 @@ use sifis_api::Sifis;
 async fn main() -> Result<(), sifis_api::Error> {
     // Creation of SIFIS-HOME API context
     let sifis = Sifis::new().await?;
-    // Look for every lamps in an environment
-    let lamps = sifis.lamps().await?;
+    // Look for every fridges in an environment
+    let fridges = sifis.fridges().await?;
 
-    for lamp in lamps {
-        // Get lamp state, whether it is on or off
-        let on_off: &str = if lamp.get_on_off().await? {
-            "On"
+    for fridge in fridges {
+        let is_open: &str = if fridge.is_open().await? {
+            "Open"
         } else {
-            "Off"
+            "Closed"
         };
-        // Get brightness
-        let brightness: u8 = lamp.get_brightness().await?;
-        // Print lamp identifier, on/off state, and brightness
-        println!("{:<15} {:<7} {:<5} ", lamp.id, on_off, brightness);
-        // Turn on the lamp
-        lamp.turn_on().await?;
+        let temperature = fridge.temperature().await?;
+        let target_temperature = fridge.target_temperature().await?;
+        println!(
+            "{:<15} {:<8} {:<5} {:<5} ",
+            fridge.id, is_open, temperature, target_temperature
+        );
+        fridge.set_target_temperature(5).await?;
     }
 
     Ok(())
