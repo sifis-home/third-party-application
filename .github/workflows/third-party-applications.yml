@@ -139,7 +139,6 @@ jobs:
           org.opencontainers.image.description=A Sifis-Home ${{ matrix.name }} image for amd64.
           software.quality=${{ steps.coverage.outputs.value }}
           manifest=${{ steps.manifest.outputs.value }}
-          type=third-party-application
 
     - name: Build and push arm64v8
       uses: docker/build-push-action@v4
@@ -155,5 +154,4 @@ jobs:
           org.opencontainers.image.description=A Sifis-Home ${{ matrix.name }} image for arm64.
           software.quality=${{ steps.coverage.outputs.value }}
           manifest=${{ steps.manifest.outputs.value }}
-          type=third-party-application
 
