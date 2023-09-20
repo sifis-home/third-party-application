@@ -24,7 +24,7 @@ impl Mock {
 fn default_mock() {
     let mock = Mock::new().unwrap();
 
-    let mut cmd = Command::cargo_bin("lamp").unwrap();
+    let mut cmd = Command::cargo_bin("sink").unwrap();
 
     let out = cmd.env("SIFIS_SERVER", &mock.sock).output().unwrap();
     let s = String::from_utf8(out.stdout).unwrap();
