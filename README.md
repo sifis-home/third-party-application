@@ -1,14 +1,8 @@
-# Third-Party Application Container
+# Third-Party Applications Generator
 
-A Docker container for a SIFIS-Home third-party application automatically
-generated through Continuous Integration starting from code.
-
-The name of a SIFIS-Home third-party application image starts with the prefix
-`3pa-` and is followed by the name of the application.
-In this repository, the name of the application is `lamp` and the name of the
-docker image is `3pa-lamp-architecture`.
-The repository name is decoupled from this naming convention.
-
+It automatically generates Docker containers for some SIFIS-Home
+third-party applications through Continuous Integration using code as starting
+point.
 
 # Extract labels from the docker image
 
@@ -21,7 +15,7 @@ image from the `ghcr` hub.
 To get labels for the `lamp` image on `amd64`:
 
 ```
-./get-labels.sh gchr.io/sifis-home/3pa-lamp-amd64 latest
+./get-labels.sh gchr.io/sifis-home/lamp-amd64 latest
 ```
 
 The second option, `latest`, represents the most recent version of the image.
@@ -29,7 +23,7 @@ The second option, `latest`, represents the most recent version of the image.
 To get labels for the `lamp` image on `arm64`:
 
 ```
-./get-labels.sh gchr.io/sifis-home/3pa-lamp-arm64 latest
+./get-labels.sh gchr.io/sifis-home/lamp-arm64 latest
 ```
 
 Both the two labels are printed on shell.
@@ -41,7 +35,7 @@ command. This solution implies that the image has already been pulled image.
 To extract the labels from the pulled image, run the following command:
 
 ```
-docker inspect --format='{{json .Config.Labels}}' ghcr.io/sifis-home/3pa-lamp-amd64
+docker inspect --format='{{json .Config.Labels}}' ghcr.io/sifis-home/lamp-amd64
 ```
 
 # Labels meaning
