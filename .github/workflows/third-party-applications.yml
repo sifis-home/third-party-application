@@ -133,8 +133,8 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ghcr.io/sifis-home/${{ matrix.name }}-amd64:${{ steps.tag.outputs.value }}
-          ghcr.io/sifis-home/${{ matrix.name }}-amd64:latest
+          ghcr.io/sifis-home/3pa-${{ matrix.name }}-amd64:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/3pa-${{ matrix.name }}-amd64:latest
         labels: |
           org.opencontainers.image.description=A Sifis-Home ${{ matrix.name }} image for amd64.
           software.quality=${{ steps.coverage.outputs.value }}
@@ -149,8 +149,8 @@ jobs:
         platforms: linux/arm64
         push: true
         tags: |
-          ghcr.io/sifis-home/${{ matrix.name }}-arm64:${{ steps.tag.outputs.value }}
-          ghcr.io/sifis-home/${{ matrix.name }}-arm64:latest
+          ghcr.io/sifis-home/3pa-${{ matrix.name }}-arm64:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/3pa-${{ matrix.name }}-arm64:latest
         labels: |
           org.opencontainers.image.description=A Sifis-Home ${{ matrix.name }} image for arm64.
           software.quality=${{ steps.coverage.outputs.value }}
