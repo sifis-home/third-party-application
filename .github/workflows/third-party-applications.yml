@@ -129,7 +129,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: x86_64-unknown-linux-musl
-        file: docker/Dockerfile-amd64
+        file: ${{ matrix.name }}/docker/Dockerfile-amd64
         platforms: linux/amd64
         push: true
         tags: |
@@ -145,7 +145,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: aarch64-unknown-linux-musl
-        file: docker/Dockerfile-arm64
+        file: ${{ matrix.name }}/docker/Dockerfile-arm64
         platforms: linux/arm64
         push: true
         tags: |
