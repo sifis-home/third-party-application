@@ -31,10 +31,6 @@ fn default_mock() {
 
     let lines = s.lines().collect::<HashSet<_>>();
 
-    let expected: HashSet<&str> = [
-        "lamp1           Off     0     ",
-        "lamp2           Off     0     ",
-    ]
-    .into();
+    let expected: HashSet<&str> = ["fridge1         Closed   5     4     "].into();
     assert_eq!(expected, lines);
 }
