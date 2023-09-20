@@ -1,4 +1,4 @@
-name: lamp-image
+name: third-party-applications
 
 on:
   push:
@@ -10,10 +10,14 @@ on:
 jobs:
   docker-image:
 
+    strategy:
+      matrix:
+        name: [lamp, sink, doorbell, fridge, oven]
+
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Install Rust stable
       uses: dtolnay/rust-toolchain@stable
@@ -50,11 +54,6 @@ jobs:
       run: |
         rustup component add llvm-tools-preview
 
-    # Not necessary on a newly created image, but strictly advised
-    - name: Run cargo clean
-      run: |
-        cargo clean
-
     - name: Install the mock server
       run:
         cargo install --git https://github.com/sifis-home/sifis-api#v0.1.0
@@ -62,9 +61,9 @@ jobs:
     - name: Run tests
       env:
         RUSTFLAGS: "-Cinstrument-coverage"
-        LLVM_PROFILE_FILE: "lamp-%p-%m.profraw"
+        LLVM_PROFILE_FILE: "${{ matrix.name }}-%p-%m.profraw"
       run: |
-        cargo test --verbose
+        cargo test --manifest-path ${{ matrix.name }}/Cargo.toml --verbose
 
     - name: Get total coverage
       run: |
@@ -84,18 +83,18 @@ jobs:
 
     - name: Build x86_64
       run: |
-        cross clean
-        cross build --release --target x86_64-unknown-linux-musl
+        cross clean --manifest-path ${{ matrix.name }}/Cargo.toml
+        cross build --manifest-path ${{ matrix.name }}/Cargo.toml --release --target x86_64-unknown-linux-musl
         mkdir -p x86_64-unknown-linux-musl
-        cp target/x86_64-unknown-linux-musl/release/lamp x86_64-unknown-linux-musl/
+        cp target/x86_64-unknown-linux-musl/release/${{ matrix.name }} x86_64-unknown-linux-musl/
 
     - name: Produce manifest
       id: manifest
       run: |
         # Produce manifest
-        manifest -b target/x86_64-unknown-linux-musl/release/lamp -l 0.1 -o lamp.json
+        manifest -b target/x86_64-unknown-linux-musl/release/${{ matrix.name }} -l 0.1 -o ${{ matrix.name}}.json
         # Save json in a temporary variable
-        MANIFEST_JSON=$(jq -c '.' lamp.json)
+        MANIFEST_JSON=$(jq -c '.' ${{ matrix.name}}.json)
         # Save json in an environment variable
         echo "value=$MANIFEST_JSON" >> $GITHUB_OUTPUT
 
@@ -103,10 +102,10 @@ jobs:
       run: |
         # cross have problems when you change the target see
         # https://github.com/cross-rs/cross/issues/724
-        cross clean
-        cross build --release --target aarch64-unknown-linux-musl
+        cross clean --manifest-path ${{ matrix.name }}/Cargo.toml
+        cross build --manifest-path ${{ matrix.name }}/Cargo.toml --release --target aarch64-unknown-linux-musl
         mkdir -p aarch64-unknown-linux-musl
-        cp target/aarch64-unknown-linux-musl/release/lamp aarch64-unknown-linux-musl/
+        cp target/aarch64-unknown-linux-musl/release/${{ matrix.name }} aarch64-unknown-linux-musl/
 
     - name: Get tag
       id: tag
@@ -134,12 +133,13 @@ jobs:
         platforms: linux/amd64
         push: true
         tags: |
-          ghcr.io/sifis-home/3pa-lamp-amd64:${{ steps.tag.outputs.value }}
-          ghcr.io/sifis-home/3pa-lamp-amd64:latest
+          ghcr.io/sifis-home/${{ matrix.name }}-amd64:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/${{ matrix.name }}-amd64:latest
         labels: |
-          org.opencontainers.image.description=A Sifis-Home lamp image for amd64.
+          org.opencontainers.image.description=A Sifis-Home ${{ matrix.name }} image for amd64.
           software.quality=${{ steps.coverage.outputs.value }}
           manifest=${{ steps.manifest.outputs.value }}
+          type=third-party-application
 
     - name: Build and push arm64v8
       uses: docker/build-push-action@v4
@@ -149,10 +149,11 @@ jobs:
         platforms: linux/arm64
         push: true
         tags: |
-          ghcr.io/sifis-home/3pa-lamp-arm64:${{ steps.tag.outputs.value }}
-          ghcr.io/sifis-home/3pa-lamp-arm64:latest
+          ghcr.io/sifis-home/${{ matrix.name }}-arm64:${{ steps.tag.outputs.value }}
+          ghcr.io/sifis-home/${{ matrix.name }}-arm64:latest
         labels: |
-          org.opencontainers.image.description=A Sifis-Home lamp image for arm64.
+          org.opencontainers.image.description=A Sifis-Home ${{ matrix.name }} image for arm64.
           software.quality=${{ steps.coverage.outputs.value }}
           manifest=${{ steps.manifest.outputs.value }}
+          type=third-party-application
 
