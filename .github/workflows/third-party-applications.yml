@@ -36,8 +36,8 @@ jobs:
     - name: Install manifest
       env:
         MANIFEST_LINK: https://github.com/sifis-home/manifest/releases/download
-        MANIFEST_VERSION: v0.3.0
-        MANIFEST_BINARY: manifest-0.3.0-x86_64-unknown-linux-gnu.tar.gz
+        MANIFEST_VERSION: v0.4.0
+        MANIFEST_BINARY: manifest-0.4.0-x86_64-unknown-linux-gnu.tar.gz
       run: |
         curl -L "$MANIFEST_LINK/$MANIFEST_VERSION/$MANIFEST_BINARY" |
         tar xz -C $HOME/.cargo/bin
