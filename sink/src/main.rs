@@ -13,6 +13,7 @@ async fn main() -> Result<(), sifis_api::Error> {
         println!("{:<15} {:<7} {:<5} ", sink.id, flow, temperature);
         sink.open_drain().await?;
         sink.set_flow(0).await?;
+        sink.close_drain().await?;
     }
 
     Ok(())
